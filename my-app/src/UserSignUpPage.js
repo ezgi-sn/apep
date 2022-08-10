@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 class UserSignPage extends React.Component{
     state={
@@ -16,10 +17,19 @@ class UserSignPage extends React.Component{
             [name]:value
         })
     }
-    onClick = event =>{
+    onChangeAgreement = event =>{
         this.setState({
             isAgreeClicked:event.target.checked
         })
+    }
+    onClick = event =>{
+        event.preventDefault();
+        const {username,password} = this.state;
+        const body = {
+            username,
+            password
+        };
+        axios.post('/api/1.0/users',body);
     }
     render(){
         return(
@@ -49,11 +59,14 @@ class UserSignPage extends React.Component{
             </div>
             <div>
             <input type="checkbox" onChange={
-                this.onClick
+                this.onChangeAgreement
             }></input>
             <label>Agreed</label>
             <button name="isAgreeClicked" disabled={
                 !this.state.isAgreeClicked
+            }
+            onClick={
+                this.onClick
             }>Sign Up</button>
             </div>
            </form>
