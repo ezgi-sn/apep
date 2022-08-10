@@ -3,18 +3,23 @@ import React from "react";
 class UserSignPage extends React.Component{
     state={
         username:null,
+        password:null,
+        passwordRepeat:null,
         isAgreeClicked:false
     }
     
-    onChangeProperty= event=>{
-        console.log(event.target.value);
-        
+    onChange = event =>{
+        /*const value = event.target.value;
+        const name=event.target.name;*/
+        const {name, value} = event.target;
+        this.setState({
+            [name]:value
+        })
     }
-    onClick = event => {
-        console.log(event.target.checked)
+    onClick = event =>{
         this.setState({
             isAgreeClicked:event.target.checked
-        });
+        })
     }
     render(){
         return(
@@ -22,28 +27,32 @@ class UserSignPage extends React.Component{
             <h1>Welcome to Apep</h1>
             <div>
             <label>Your Username:</label>
-            <input 
+            <input name="username"
             onChange={
-                this.onChangeProperty
+                this.onChange
             }
             ></input>
             </div>
              
             <div>
             <label>Your Password:</label>
-            <input type="password"></input>
+            <input type="password" name="password" onChange={
+                this.onChange
+            }></input>
             </div>
 
             <div>
             <label>Password Again:</label>
-            <input type="password"></input>
+            <input type="password" name="passwordRepeat" onChange={
+                this.onChange
+            }></input>
             </div>
             <div>
             <input type="checkbox" onChange={
                 this.onClick
             }></input>
             <label>Agreed</label>
-            <button disabled={
+            <button name="isAgreeClicked" disabled={
                 !this.state.isAgreeClicked
             }>Sign Up</button>
             </div>
