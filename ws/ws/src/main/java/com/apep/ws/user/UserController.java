@@ -15,7 +15,9 @@ public class UserController {
 	IUserRepo userRepo;
 	
 	@PostMapping("/api/1.0/users")
-	public void createUser(@RequestBody User user) {
+	public GenericResponse createUser(@RequestBody User user) {
 		userRepo.save(user);
+		GenericResponse genericResponse=new GenericResponse("user created");
+		return genericResponse;
 	}
 }

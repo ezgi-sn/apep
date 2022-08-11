@@ -1,12 +1,13 @@
 import React from "react";
-import axios from "axios";
+import {signUp} from './apiCalls'
+import { Button, Spinner } from 'react-bootstrap';
 
 class UserSignPage extends React.Component{
     state={
         username:null,
         password:null,
         passwordRepeat:null,
-        isAgreeClicked:false
+        pendingApi: false
     }
     
     onChange = event =>{
@@ -17,11 +18,6 @@ class UserSignPage extends React.Component{
             [name]:value
         })
     }
-    onChangeAgreement = event =>{
-        this.setState({
-            isAgreeClicked:event.target.checked
-        })
-    }
     onClick = event =>{
         event.preventDefault();
         const {username,password} = this.state;
@@ -29,47 +25,56 @@ class UserSignPage extends React.Component{
             username,
             password
         };
-        axios.post('/api/1.0/users',body);
+        this.setState({pendingApi:true});
+        signUp(body).then(response=>{
+            this.setState({pendingApi:false});
+        });
     }
     render(){
         return(
+            <div className="container">
            <form>
-            <h1>Welcome to Apep</h1>
-            <div>
+            <h1 className="text-center">Welcome to Apep</h1>
+            <div className="form-group">
             <label>Your Username:</label>
             <input name="username"
             onChange={
                 this.onChange
-            }
+            } className="form-control"
             ></input>
             </div>
              
-            <div>
+            <div className="form-group">
             <label>Your Password:</label>
             <input type="password" name="password" onChange={
                 this.onChange
-            }></input>
+            } className="form-control"></input>
             </div>
 
-            <div>
+            <div className="form-group">
             <label>Password Again:</label>
             <input type="password" name="passwordRepeat" onChange={
                 this.onChange
-            }></input>
+            } className="form-control"></input>
             </div>
-            <div>
-            <input type="checkbox" onChange={
-                this.onChangeAgreement
-            }></input>
-            <label>Agreed</label>
+            <div className="form-group text-center">
             <button name="isAgreeClicked" disabled={
-                !this.state.isAgreeClicked
+                this.state.pendingApi
             }
             onClick={
                 this.onClick
-            }>Sign Up</button>
+            } className="btn btn-primary">
+                {this.state.pendingApi && <Spinner
+                    as="span"
+                    variant="light"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    animation="border"/>}
+                Sign Up</button>
             </div>
            </form>
+           </div>
         );        
     }
 
